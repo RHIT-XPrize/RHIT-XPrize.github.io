@@ -1,4 +1,4 @@
-#+COMMENT: -*- (setq org-reveal-root "") -*-
+#+COMMENT: -*-eval: (setq org-reveal-root "");-*-
 
 #+TITLE: AI XPrize Architecture
 #+AUTHOR:
