@@ -25,26 +25,40 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h1 class="title">AI XPrize Architecture</h1><p class="date">Created: 2017-10-29 Sun 17:18</p>
+<section id="sec-title-slide"><h1 class="title">AI XPrize Architecture</h1><p class="date">Created: 2017-10-30 Mon 16:05</p>
 </section>
 
 <section>
-<section id="slide-org6318347">
-<h2 id="org6318347">Core Requirements</h2>
+<section id="slide-orgd44284e">
+<h2 id="orgd44284e">Our Goal</h2>
+<ul>
+<li>RHIT is participating in the IBM AI XPrize Competition in 2020!</li>
+<li>Robot that can understand and react to natural human interaction.</li>
+<li>Specifically working with the manipulation of blocks.</li>
+<li>Architect a system that can be easily used and extended by future
+teams.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orga4e658d">
+<h2 id="orga4e658d">Core Requirements</h2>
 <ul>
 <li>Interfaces with ROS-Indigo.</li>
-<li>Easy to slot new components in and out.</li>
+<li>Easy to slot new components in and out in different combinations to
+facilitate rapid experimentation and development.</li>
 <li>Able to add new components using different languages.</li>
 
 </ul>
 </section>
 </section>
 <section>
-<section id="slide-orgb78febb">
-<h2 id="orgb78febb">ROS</h2>
+<section id="slide-orgcfbb803">
+<h2 id="orgcfbb803">ROS</h2>
 <ul>
-<li>Protocol that allows easy interface between different <code>rosnode</code>'s to
-send messages back and forth.</li>
+<li>"Robotic Operating System"</li>
+<li>Protocol for arbitrary message transmission between <code>rosnode</code>'s.</li>
 <li>Allows communication across languages.</li>
 <li><code>rosjava</code> is the Java interface to ROS.</li>
 
@@ -52,9 +66,10 @@ send messages back and forth.</li>
 </section>
 </section>
 <section>
-<section id="slide-org1ca9ec9">
-<h2 id="org1ca9ec9">UIMA</h2>
+<section id="slide-org834e541">
+<h2 id="org834e541">UIMA</h2>
 <ul>
+<li>"Unstructured Information Management Architecture"</li>
 <li>Pipeline architecture used for information processing.</li>
 <li>Notably used (and significantly improved) in the IBM Watson
 project.</li>
@@ -67,8 +82,8 @@ deprecated.</li>
 
 </ul>
 </section>
-<section id="slide-org999a408">
-<h3 id="org999a408">Common Analysis System (CAS)</h3>
+<section id="slide-org029d005">
+<h3 id="org029d005">Common Analysis System (CAS)</h3>
 <ul>
 <li>"Universal" datatype used by all components of UIMA.</li>
 <li>Holds some base information with various annotations written on top
@@ -76,9 +91,10 @@ of it.</li>
 
 </ul>
 </section>
-<section id="slide-org844a47f">
-<h3 id="org844a47f">Annotators Explanation</h3>
+<section id="slide-org702e06c">
+<h3 id="org702e06c">Annotators Explanation</h3>
 <ul>
+<li>Subset of the general term "Analysis Engine (AE)."</li>
 <li>Central component in UIMA.</li>
 <li>Inputs a CAS object, and adds new annotation objects to it.</li>
 <li>Defined by XML Descriptor file.</li>
@@ -86,11 +102,11 @@ of it.</li>
 
 </ul>
 </section>
-<section id="slide-orga12bd59">
-<h3 id="orga12bd59">Annotators Example</h3>
+<section id="slide-org8ab1ea7">
+<h3 id="org8ab1ea7">Basic Annotator Example</h3>
 <div class="org-src-container">
 
-<pre  class="src src-java"><span style="color: #00ced1;">public</span> <span style="color: #00ced1;">class</span> <span style="color: #ff00ff;">MyAnnotator</span> <span style="color: #9b30ff;">{</span>
+<pre  class="src src-java"><span style="color: #00ced1;">public</span> <span style="color: #00ced1;">class</span> <span style="color: #ff00ff;">MyAnnotator</span> <span style="color: #00ced1;">extends</span> <span style="color: #ff00ff;">JCasAnnotator_ImplBase</span> <span style="color: #9b30ff;">{</span>
     <span style="color: #ffa500;">@Override</span>
     <span style="color: #00ced1;">public</span> <span style="color: #ff00ff;">void</span> <span style="color: #228b22;">process</span><span style="color: #20b2aa;">(</span><span style="color: #ff00ff;">JCas</span> <span style="color: #ffff00;">cas</span><span style="color: #20b2aa;">)</span> <span style="color: #00ced1;">throws</span> <span style="color: #ff00ff;">AnalysisEngineProcessException</span> <span style="color: #20b2aa;">{</span>
         <span style="color: #ff00ff;">String</span> <span style="color: #ffff00;">docText</span> = cas.getDocumentText<span style="color: #00ff00;">()</span>;
@@ -107,8 +123,8 @@ of it.</li>
 </pre>
 </div>
 </section>
-<section id="slide-org5834151">
-<h3 id="org5834151">Aggregate Analysis Engines</h3>
+<section id="slide-org115f5d1">
+<h3 id="org115f5d1">Aggregate AE's</h3>
 <ul>
 <li>Allows for chaining multiple annotators together.</li>
 <li>Essentially just an XML Descriptor file that orders other XML
@@ -118,8 +134,26 @@ Descriptors.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgaa61210">
-<h2 id="orgaa61210">Universal UIMA</h2>
+<section id="slide-orgbd978c9">
+<h2 id="orgbd978c9">RoboSherlock</h2>
+<ul>
+<li>Another project working to marry ROS with UIMA.</li>
+<li>Written entirely in C++.
+<ul>
+<li>As such, it uses the seemingly unsupported C++ UIMA.</li>
+<li>While UIMA C++ supports other languages (including Python), that
+support is even more out-of-date than the core C++.</li>
+
+</ul></li>
+<li>We did take lessons learned from their pipeline design into
+consideration when outlining how ours would function.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgc2b1e41">
+<h2 id="orgc2b1e41">Networked UIMA</h2>
 <ul>
 <li>Our design for making UIMA multi-lingual.</li>
 <li>Currently implemented using HTTP.</li>
@@ -127,8 +161,8 @@ Descriptors.</li>
 
 </ul>
 </section>
-<section id="slide-org4dbf840">
-<h3 id="org4dbf840">HTTP UIMA Protocol Description</h3>
+<section id="slide-orgd44132e">
+<h3 id="orgd44132e">HTTP UIMA Protocol Description</h3>
 <ul>
 <li>Serialize CAS object into JSON using built-in UIMA functions.</li>
 <li>Send Multipart HTTP request to an external server with the JSON-CAS
@@ -138,8 +172,8 @@ processes it, and returns a list of annotations in JSON.</li>
 
 </ul>
 </section>
-<section id="slide-orgd4faf41">
-<h3 id="orgd4faf41">Returned Annotation JSON</h3>
+<section id="slide-orgfc63893">
+<h3 id="orgfc63893">Returned Annotation JSON</h3>
 <div class="org-src-container">
 
 <pre  class="src src-javascript"><span style="color: #9b30ff;">{</span>
@@ -165,43 +199,8 @@ processes it, and returns a list of annotations in JSON.</li>
 </pre>
 </div>
 </section>
-<section id="slide-org5dabc50">
-<h3 id="org5dabc50">Using the Protocol</h3>
-<ul>
-<li>Goal to necessitate as little Java code as possible when writing an
-external annotator.</li>
-
-</ul>
-<div class="org-src-container">
-
-<pre  class="src src-java"><span style="color: #00ced1;">public</span> <span style="color: #00ced1;">class</span> <span style="color: #ff00ff;">ColorsAnnotator</span> <span style="color: #00ced1;">extends</span> <span style="color: #ff00ff;">HttpAnnotator</span> <span style="color: #9b30ff;">{</span>
-    <span style="color: #ffa500;">@Override</span>
-    <span style="color: #00ced1;">protected</span> <span style="color: #ff00ff;">Class</span><span style="color: #20b2aa;">&lt;</span>? <span style="color: #00ced1;">extends</span> <span style="color: #ff00ff;">Annotation</span><span style="color: #20b2aa;">&gt;</span> <span style="color: #228b22;">getAnnotationClass</span><span style="color: #20b2aa;">(</span><span style="color: #ff00ff;">String</span> <span style="color: #ffff00;">name</span><span style="color: #20b2aa;">)</span>
-            <span style="color: #00ced1;">throws</span> <span style="color: #ff00ff;">NoMatchingAnnotationException</span> <span style="color: #20b2aa;">{</span>
-        <span style="color: #00ced1;">if</span> <span style="color: #00ff00;">(</span>name.equals<span style="color: #ffff00;">(</span><span style="color: #d2691e;">"Color"</span><span style="color: #ffff00;">)</span><span style="color: #00ff00;">)</span>
-            <span style="color: #00ced1;">return</span> Color.<span style="color: #00ced1;">class</span>;
-        <span style="color: #00ced1;">throw</span> <span style="color: #00ced1;">new</span> <span style="color: #ffa500;">HttpAnnotator</span>.<span style="color: #ff00ff;">NoMatchingAnnotationException</span><span style="color: #00ff00;">()</span>;
-    <span style="color: #20b2aa;">}</span>
-<span style="color: #9b30ff;">}</span>
-</pre>
-</div>
-<ul>
-<li>If the annotation type only uses primitives, no additional code is
-necessary.</li>
-<li>Otherwise, the subclass needs only to override a single method to
-add custom behavior.</li>
-
-</ul>
-<aside class="notes">
-<p>
-Should probably mention that we don't use a <code>RuntimeException</code> to
-emphasize that this <i>must</i> be handled in the superclass.
-</p>
-
-</aside>
-</section>
-<section id="slide-org4cb284c">
-<h3 id="org4cb284c">Configuration</h3>
+<section id="slide-orgaa644bc">
+<h3 id="orgaa644bc">Configuration</h3>
 <ul>
 <li>External annotators will have their access defined in a global JSON
 file, either distributed ahead of time or on some server at a fixed
@@ -225,8 +224,8 @@ location.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgc87b55d">
-<h2 id="orgc87b55d">Resulting Architecture Diagram</h2>
+<section id="slide-orgf7c6023">
+<h2 id="orgf7c6023">Resulting Architecture Diagram</h2>
 
 <div class="figure">
 <p><img src="architecture.png" alt="architecture.png" />
@@ -235,13 +234,143 @@ location.</li>
 </section>
 </section>
 <section>
-<section id="slide-org2cff349">
-<h2 id="org2cff349">Demo</h2>
+<section id="slide-orgca83c74">
+<h2 id="orgca83c74">Example Use Case</h2>
+<ul>
+<li>We're going to add an example external annotator written in Python.</li>
+<li>There is an existing HTTP Annotator superclass in Python, so we
+don't need to worry about implementing the protocol.</li>
+<li>We'll be adding an annotator that find bits of text which refer to
+colors.</li>
+
+</ul>
+</section>
+<section id="slide-orgd6672fd">
+<h3 id="orgd6672fd">Writing the Descriptor File</h3>
+<ul>
+<li>An Eclipse plugin features a convenient GUI for working with XML
+Descriptor files.</li>
+<li>One will need only to specify the input types, the output types, and
+which Java class represents this descriptor.</li>
+
+</ul>
+
+<div class="figure">
+<p><img src="./descriptor_editor.png" alt="descriptor_editor.png" />
+</p>
+</div>
+</section>
+<section id="slide-org451ec91">
+<h3 id="org451ec91">Adding to the Aggregate AE</h3>
+<ul>
+<li>Edit whatever Aggregate AE's Descriptor XML file you wish to add the
+Annotator to.</li>
+<li>Again, the Eclipse plugin makes this very easy to accomplish.</li>
+
+</ul>
+
+<div class="figure">
+<p><img src="./aggregate_editor.png" alt="aggregate_editor.png" />
+</p>
+</div>
+</section>
+<section id="slide-org4ad097a">
+<h3 id="org4ad097a">Writing the Java Code</h3>
+<ul>
+<li>Goal to necessitate as little Java code as possible when writing an
+external annotator.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-java"><span style="color: #00ced1;">public</span> <span style="color: #00ced1;">class</span> <span style="color: #ff00ff;">ColorsAnnotator</span> <span style="color: #00ced1;">extends</span> <span style="color: #ff00ff;">HttpAnnotator</span> <span style="color: #9b30ff;">{</span>
+    <span style="color: #ffa500;">@Override</span>
+    <span style="color: #00ced1;">protected</span> <span style="color: #ff00ff;">Class</span><span style="color: #20b2aa;">&lt;</span>? <span style="color: #00ced1;">extends</span> <span style="color: #ff00ff;">Annotation</span><span style="color: #20b2aa;">&gt;</span> <span style="color: #228b22;">getAnnotationClass</span><span style="color: #20b2aa;">(</span><span style="color: #ff00ff;">String</span> <span style="color: #ffff00;">name</span><span style="color: #20b2aa;">)</span>
+            <span style="color: #00ced1;">throws</span> <span style="color: #ff00ff;">NoMatchingAnnotationException</span> <span style="color: #20b2aa;">{</span>
+        <span style="color: #00ced1;">if</span> <span style="color: #00ff00;">(</span>name.equals<span style="color: #ffff00;">(</span><span style="color: #d2691e;">"Color"</span><span style="color: #ffff00;">)</span><span style="color: #00ff00;">)</span>
+            <span style="color: #00ced1;">return</span> Color.<span style="color: #00ced1;">class</span>;
+        <span style="color: #00ced1;">throw</span> <span style="color: #00ced1;">new</span> <span style="color: #ff00ff;">NoMatchingAnnotationException</span><span style="color: #00ff00;">()</span>;
+    <span style="color: #20b2aa;">}</span>
+<span style="color: #9b30ff;">}</span>
+</pre>
+</div>
+<ul>
+<li>Superclass auto-magically parses primitives into Annotations.</li>
+<li>Subclass can always override method to implement custom behavior.</li>
+
+</ul>
+</section>
+<section id="slide-orgc2df783">
+<h3 id="orgc2df783">Writing the Python Annotation</h3>
+<ul>
+<li>UIMA auto-generates the Annotation classes for Java, but we have to
+do so manually in other languages.</li>
+<li>The two types must agree in terms of field names and types, as well
+as the name of the Annotation itself.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #00ced1;">class</span> <span style="color: #ff00ff;">Color</span><span style="color: #9b30ff;">(</span>Annotation<span style="color: #9b30ff;">)</span>:
+    <span style="color: #00ced1;">def</span> <span style="color: #228b22;">__init__</span><span style="color: #9b30ff;">(</span><span style="color: #00ced1;">self</span>, color, start, end<span style="color: #9b30ff;">)</span>:
+        <span style="color: #00ced1;">self</span>.color = color
+        <span style="color: #00ced1;">self</span>.begin = start
+        <span style="color: #00ced1;">self</span>.end = end
+</pre>
+</div>
+</section>
+<section id="slide-org5f17856">
+<h3 id="org5f17856">Writing the Python Annotator</h3>
+<ul>
+<li>There's an existing implementation of our protocol in Python, so we
+simply extend it.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #00ced1;">class</span> <span style="color: #ff00ff;">ColorAnnotator</span><span style="color: #9b30ff;">(</span>Annotator<span style="color: #9b30ff;">)</span>:
+    <span style="color: #00ced1;">def</span> <span style="color: #228b22;">initialize</span><span style="color: #9b30ff;">(</span><span style="color: #00ced1;">self</span><span style="color: #9b30ff;">)</span>:
+        <span style="color: #00ff00;">super</span><span style="color: #9b30ff;">()</span>.initialize<span style="color: #9b30ff;">()</span>
+        <span style="color: #00ced1;">self</span>.color_words = <span style="color: #9b30ff;">[</span><span style="color: #d2691e;">'red'</span>, <span style="color: #d2691e;">'blue'</span>, <span style="color: #d2691e;">'yellow'</span><span style="color: #9b30ff;">]</span>
+        <span style="color: #00ced1;">self</span>.annotation_types.append<span style="color: #9b30ff;">(</span>Color<span style="color: #9b30ff;">)</span>
+
+    <span style="color: #00ced1;">def</span> <span style="color: #228b22;">process</span><span style="color: #9b30ff;">(</span><span style="color: #00ced1;">self</span>, data<span style="color: #9b30ff;">)</span>:
+        <span style="color: #ffff00;">sofa_string</span> = data<span style="color: #9b30ff;">[</span><span style="color: #d2691e;">'_referenced_fss'</span><span style="color: #9b30ff;">][</span><span style="color: #d2691e;">'1'</span><span style="color: #9b30ff;">][</span><span style="color: #d2691e;">'sofaString'</span><span style="color: #9b30ff;">]</span>
+        <span style="color: #00ced1;">for</span> word <span style="color: #00ced1;">in</span> <span style="color: #00ced1;">self</span>.color_words:
+            <span style="color: #00ced1;">if</span> word <span style="color: #00ced1;">in</span> sofa_string:
+                <span style="color: #00ced1;">self</span>.add_annotation<span style="color: #9b30ff;">(</span>Color<span style="color: #20b2aa;">(</span>word, -1, -1<span style="color: #20b2aa;">)</span><span style="color: #9b30ff;">)</span>
+</pre>
+</div>
+</section>
+<section id="slide-orgf9f8697">
+<h3 id="orgf9f8697">Additional Configuration</h3>
+<ul>
+<li>Add a new entry into the global configuration JSON file that lists
+the address and port this external annotator can be located.</li>
+
+</ul>
+</section>
+<section id="slide-org816eb00">
+<h3 id="org816eb00">Running</h3>
+<ul>
+<li>Document text to be analyzed is hard-coded into <code>Controller</code> for
+demonstration purposes.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-bash">python ColorAnnotator.py &amp;
+
+roscore &amp;
+rosrun edu_rosehulman_aixprize pipeline <span style="color: #d2691e;">\</span>
+       edu.rosehulman.aixprize.pipeline.core.Controller
+</pre>
+</div>
 </section>
 </section>
 <section>
-<section id="slide-orgf4391dc">
-<h2 id="orgf4391dc">Questions?</h2>
+<section id="slide-org57696a0">
+<h2 id="org57696a0">Questions?</h2>
 </section>
 </section>
 </div>
