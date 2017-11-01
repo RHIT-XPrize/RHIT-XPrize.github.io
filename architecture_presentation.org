@@ -40,8 +40,7 @@
   of it.
 - This base information may be either plain document text or arbitrary
   binary data.
-** Annotators Explanation
-- Subset of the general term "Analysis Engine (AE)."
+** Annotators
 - Central component in UIMA.
 - Inputs a CAS object, and adds new annotation objects to it.
 - Defined by XML Descriptor file.
@@ -114,11 +113,11 @@
   location.
 #+BEGIN_SRC javascript
   {
-      "annotator_name": {
+      "annotator.class_name": {
           "address": "123.45.67.89",
           "port": 1234
       },
-      "other_annotator_name": {
+      "other_annotator.class_name": {
           "address": "123.45.67.80",
           "port": 4321
       }
@@ -185,16 +184,10 @@
 ** Writing the Java Code
 - Goal to necessitate as little Java code as possible when writing an
   external annotator.
+- Superclass takes care of all the custom protocol, so the concrete
+  Annotator class has little to no code.
 #+BEGIN_SRC java
-  public class ColorsAnnotator extends HttpAnnotator {
-      @Override
-      protected Class<? extends Annotation> getAnnotationClass(String name)
-              throws NoMatchingAnnotationException {
-          if (name.equals("Color"))
-              return Color.class;
-          throw new NoMatchingAnnotationException();
-      }
-  }
+  public class ColorsAnnotator extends HttpAnnotator { }
 #+END_SRC
 - Superclass auto-magically parses primitives into Annotations.
 - Subclass can always override method to implement custom behavior.
