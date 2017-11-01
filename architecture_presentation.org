@@ -12,6 +12,10 @@
 - Specifically working with the manipulation of blocks.
 - Architect a system that can be easily used and extended by future
   teams.
+** Current MVP
+[[./MVP.png]]
+** Final Goal
+[[./sawyer.jpg]]
 * Core Requirements
 - Interfaces with ROS-Indigo.
 - Easy to slot new components in and out in different combinations to
