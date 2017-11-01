@@ -1,4 +1,4 @@
-#+COMMENT: eval: -*-(setq org-reveal-root "")-*-;
+#+COMMENT: eval: -*-(setq org-reveal-root "");-*-
 
 #+TITLE: AI XPrize Architecture
 #+AUTHOR:
@@ -34,6 +34,8 @@
 - "Universal" datatype used by all components of UIMA.
 - Holds some base information with various annotations written on top
   of it.
+- This base information may be either plain document text or arbitrary
+  binary data.
 ** Annotators Explanation
 - Subset of the general term "Analysis Engine (AE)."
 - Central component in UIMA.

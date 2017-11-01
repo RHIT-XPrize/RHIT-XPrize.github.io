@@ -25,12 +25,12 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h1 class="title">AI XPrize Architecture</h1><p class="date">Created: 2017-10-30 Mon 16:05</p>
+<section id="sec-title-slide"><h1 class="title">AI XPrize Architecture</h1><p class="date">Created: 2017-11-01 Wed 10:46</p>
 </section>
 
 <section>
-<section id="slide-orgd44284e">
-<h2 id="orgd44284e">Our Goal</h2>
+<section id="slide-org05923f2">
+<h2 id="org05923f2">Our Goal</h2>
 <ul>
 <li>RHIT is participating in the IBM AI XPrize Competition in 2020!</li>
 <li>Robot that can understand and react to natural human interaction.</li>
@@ -42,8 +42,8 @@ teams.</li>
 </section>
 </section>
 <section>
-<section id="slide-orga4e658d">
-<h2 id="orga4e658d">Core Requirements</h2>
+<section id="slide-orgea482ca">
+<h2 id="orgea482ca">Core Requirements</h2>
 <ul>
 <li>Interfaces with ROS-Indigo.</li>
 <li>Easy to slot new components in and out in different combinations to
@@ -54,8 +54,8 @@ facilitate rapid experimentation and development.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgcfbb803">
-<h2 id="orgcfbb803">ROS</h2>
+<section id="slide-orgae418b1">
+<h2 id="orgae418b1">ROS</h2>
 <ul>
 <li>"Robotic Operating System"</li>
 <li>Protocol for arbitrary message transmission between <code>rosnode</code>'s.</li>
@@ -66,8 +66,8 @@ facilitate rapid experimentation and development.</li>
 </section>
 </section>
 <section>
-<section id="slide-org834e541">
-<h2 id="org834e541">UIMA</h2>
+<section id="slide-org79ae0b3">
+<h2 id="org79ae0b3">UIMA</h2>
 <ul>
 <li>"Unstructured Information Management Architecture"</li>
 <li>Pipeline architecture used for information processing.</li>
@@ -82,17 +82,19 @@ deprecated.</li>
 
 </ul>
 </section>
-<section id="slide-org029d005">
-<h3 id="org029d005">Common Analysis System (CAS)</h3>
+<section id="slide-orgfbfab59">
+<h3 id="orgfbfab59">Common Analysis System (CAS)</h3>
 <ul>
 <li>"Universal" datatype used by all components of UIMA.</li>
 <li>Holds some base information with various annotations written on top
 of it.</li>
+<li>This base information may be either plain document text or arbitrary
+binary data.</li>
 
 </ul>
 </section>
-<section id="slide-org702e06c">
-<h3 id="org702e06c">Annotators Explanation</h3>
+<section id="slide-orge98aa70">
+<h3 id="orge98aa70">Annotators Explanation</h3>
 <ul>
 <li>Subset of the general term "Analysis Engine (AE)."</li>
 <li>Central component in UIMA.</li>
@@ -102,8 +104,8 @@ of it.</li>
 
 </ul>
 </section>
-<section id="slide-org8ab1ea7">
-<h3 id="org8ab1ea7">Basic Annotator Example</h3>
+<section id="slide-org02a8ebb">
+<h3 id="org02a8ebb">Basic Annotator Example</h3>
 <div class="org-src-container">
 
 <pre  class="src src-java"><span style="color: #00ced1;">public</span> <span style="color: #00ced1;">class</span> <span style="color: #ff00ff;">MyAnnotator</span> <span style="color: #00ced1;">extends</span> <span style="color: #ff00ff;">JCasAnnotator_ImplBase</span> <span style="color: #9b30ff;">{</span>
@@ -123,8 +125,8 @@ of it.</li>
 </pre>
 </div>
 </section>
-<section id="slide-org115f5d1">
-<h3 id="org115f5d1">Aggregate AE's</h3>
+<section id="slide-org2e15197">
+<h3 id="org2e15197">Aggregate AE's</h3>
 <ul>
 <li>Allows for chaining multiple annotators together.</li>
 <li>Essentially just an XML Descriptor file that orders other XML
@@ -134,8 +136,8 @@ Descriptors.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgbd978c9">
-<h2 id="orgbd978c9">RoboSherlock</h2>
+<section id="slide-org71595bc">
+<h2 id="org71595bc">RoboSherlock</h2>
 <ul>
 <li>Another project working to marry ROS with UIMA.</li>
 <li>Written entirely in C++.
@@ -152,8 +154,8 @@ consideration when outlining how ours would function.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgc2b1e41">
-<h2 id="orgc2b1e41">Networked UIMA</h2>
+<section id="slide-org39f1108">
+<h2 id="org39f1108">Networked UIMA</h2>
 <ul>
 <li>Our design for making UIMA multi-lingual.</li>
 <li>Currently implemented using HTTP.</li>
@@ -161,8 +163,8 @@ consideration when outlining how ours would function.</li>
 
 </ul>
 </section>
-<section id="slide-orgd44132e">
-<h3 id="orgd44132e">HTTP UIMA Protocol Description</h3>
+<section id="slide-org153e53b">
+<h3 id="org153e53b">HTTP UIMA Protocol Description</h3>
 <ul>
 <li>Serialize CAS object into JSON using built-in UIMA functions.</li>
 <li>Send Multipart HTTP request to an external server with the JSON-CAS
@@ -172,8 +174,8 @@ processes it, and returns a list of annotations in JSON.</li>
 
 </ul>
 </section>
-<section id="slide-orgfc63893">
-<h3 id="orgfc63893">Returned Annotation JSON</h3>
+<section id="slide-orgbdbfe95">
+<h3 id="orgbdbfe95">Returned Annotation JSON</h3>
 <div class="org-src-container">
 
 <pre  class="src src-javascript"><span style="color: #9b30ff;">{</span>
@@ -199,8 +201,8 @@ processes it, and returns a list of annotations in JSON.</li>
 </pre>
 </div>
 </section>
-<section id="slide-orgaa644bc">
-<h3 id="orgaa644bc">Configuration</h3>
+<section id="slide-org2927716">
+<h3 id="org2927716">Configuration</h3>
 <ul>
 <li>External annotators will have their access defined in a global JSON
 file, either distributed ahead of time or on some server at a fixed
@@ -224,8 +226,8 @@ location.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgf7c6023">
-<h2 id="orgf7c6023">Resulting Architecture Diagram</h2>
+<section id="slide-orgede1d02">
+<h2 id="orgede1d02">Resulting Architecture Diagram</h2>
 
 <div class="figure">
 <p><img src="architecture.png" alt="architecture.png" />
@@ -234,8 +236,8 @@ location.</li>
 </section>
 </section>
 <section>
-<section id="slide-orgca83c74">
-<h2 id="orgca83c74">Example Use Case</h2>
+<section id="slide-orgf212a90">
+<h2 id="orgf212a90">Example Use Case</h2>
 <ul>
 <li>We're going to add an example external annotator written in Python.</li>
 <li>There is an existing HTTP Annotator superclass in Python, so we
@@ -245,8 +247,8 @@ colors.</li>
 
 </ul>
 </section>
-<section id="slide-orgd6672fd">
-<h3 id="orgd6672fd">Writing the Descriptor File</h3>
+<section id="slide-orgf9fccf4">
+<h3 id="orgf9fccf4">Writing the Descriptor File</h3>
 <ul>
 <li>An Eclipse plugin features a convenient GUI for working with XML
 Descriptor files.</li>
@@ -260,8 +262,8 @@ which Java class represents this descriptor.</li>
 </p>
 </div>
 </section>
-<section id="slide-org451ec91">
-<h3 id="org451ec91">Adding to the Aggregate AE</h3>
+<section id="slide-orgc6fea36">
+<h3 id="orgc6fea36">Adding to the Aggregate AE</h3>
 <ul>
 <li>Edit whatever Aggregate AE's Descriptor XML file you wish to add the
 Annotator to.</li>
@@ -274,8 +276,8 @@ Annotator to.</li>
 </p>
 </div>
 </section>
-<section id="slide-org4ad097a">
-<h3 id="org4ad097a">Writing the Java Code</h3>
+<section id="slide-org05d57f6">
+<h3 id="org05d57f6">Writing the Java Code</h3>
 <ul>
 <li>Goal to necessitate as little Java code as possible when writing an
 external annotator.</li>
@@ -300,8 +302,8 @@ external annotator.</li>
 
 </ul>
 </section>
-<section id="slide-orgc2df783">
-<h3 id="orgc2df783">Writing the Python Annotation</h3>
+<section id="slide-orgc648a20">
+<h3 id="orgc648a20">Writing the Python Annotation</h3>
 <ul>
 <li>UIMA auto-generates the Annotation classes for Java, but we have to
 do so manually in other languages.</li>
@@ -319,8 +321,8 @@ as the name of the Annotation itself.</li>
 </pre>
 </div>
 </section>
-<section id="slide-org5f17856">
-<h3 id="org5f17856">Writing the Python Annotator</h3>
+<section id="slide-orgdd993f2">
+<h3 id="orgdd993f2">Writing the Python Annotator</h3>
 <ul>
 <li>There's an existing implementation of our protocol in Python, so we
 simply extend it.</li>
@@ -342,16 +344,16 @@ simply extend it.</li>
 </pre>
 </div>
 </section>
-<section id="slide-orgf9f8697">
-<h3 id="orgf9f8697">Additional Configuration</h3>
+<section id="slide-orgab55553">
+<h3 id="orgab55553">Additional Configuration</h3>
 <ul>
 <li>Add a new entry into the global configuration JSON file that lists
 the address and port this external annotator can be located.</li>
 
 </ul>
 </section>
-<section id="slide-org816eb00">
-<h3 id="org816eb00">Running</h3>
+<section id="slide-org762081f">
+<h3 id="org762081f">Running</h3>
 <ul>
 <li>Document text to be analyzed is hard-coded into <code>Controller</code> for
 demonstration purposes.</li>
@@ -369,8 +371,8 @@ rosrun edu_rosehulman_aixprize pipeline <span style="color: #d2691e;">\</span>
 </section>
 </section>
 <section>
-<section id="slide-org57696a0">
-<h2 id="org57696a0">Questions?</h2>
+<section id="slide-orge9bdab7">
+<h2 id="orge9bdab7">Questions?</h2>
 </section>
 </section>
 </div>
