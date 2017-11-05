@@ -13,9 +13,9 @@
 - Architect a system that can be easily used and extended by future
   teams.
 ** Current MVP
-[[./MVP.png]]
+[[file:../../images/MVP.png]]
 ** Final Goal
-[[./sawyer.jpg]]
+[[file:../../images/sawyer.jpg]]
 * Core Requirements
 - Interfaces with ROS-Indigo.
 - Easy to slot new components in and out in different combinations to
@@ -163,7 +163,7 @@
 #+END_SRC
 
 #+RESULTS:
-[[file:architecture.png]]
+[[file:../../images/architecture.png]]
 * Example Use Case
 - We're going to add an example external annotator written in Python.
 - There is an existing HTTP Annotator superclass in Python, so we
@@ -175,12 +175,12 @@
   Descriptor files.
 - One will need only to specify the input types, the output types, and
   which Java class represents this descriptor.
-[[./descriptor_editor.png]]
+[[file:../../images/descriptor_editor.png]]
 ** Adding to the Aggregate AE
 - Edit whatever Aggregate AE's Descriptor XML file you wish to add the
   Annotator to.
 - Again, the Eclipse plugin makes this very easy to accomplish.
-[[./aggregate_editor.png]]
+[[file:../../images/aggregate_editor.png]]
 ** Writing the Java Code
 - Goal to necessitate as little Java code as possible when writing an
   external annotator.

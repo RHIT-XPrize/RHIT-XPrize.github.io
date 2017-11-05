@@ -40,7 +40,7 @@ using HTTP.
 3. External annotator (acting as a server) receives the request,
    processes it, and returns a list of annotations in JSON.
 * Resulting Architecture Diagram
-#+BEGIN_SRC plantuml :file architecture.png
+#+BEGIN_SRC plantuml :file ../images/architecture.png
   node Microphone {
       [MicrophoneBroadcaster]
   }
@@ -79,7 +79,7 @@ using HTTP.
 #+END_SRC
 
 #+RESULTS:
-[[file:architecture.png]]
+[[file:../images/architecture.png]]
 This diagram illustrates how the various components of our
 architecture connect together. Starting off in the bottom left corner
 is our =Descriptors= folder. This is a UIMA feature that allows the
