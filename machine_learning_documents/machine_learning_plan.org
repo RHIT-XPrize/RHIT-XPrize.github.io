@@ -1,0 +1,170 @@
+#+TITLE: AI XPrize Machine Learning Plan
+#+AUTHOR: Remy Bubulka, Coleman Gibson, Kieran Groble, Lewis Kelley
+
+* Introduction
+In general, there are two proposed methods for training the robot AI,
+one with a human in the loop and one with only AI's bouncing data off
+of each other. The game has two roles, the "human" and the "robot."
+
+Due to the potential confusion of having the "human" be controlled by
+either an actual person or an AI, for this document we shall refer to
+the role giving instructions as the Commander and the role receiving
+commands as the Worker.
+
+From a high level, whatever system is put in for the Worker, it should
+operate as a function that inputs:
+- a list of blocks with their locations and visual information
+- a command string from the Commander
+- a 2D point the Commander pointed to
+and outputs:
+- a 2D point representing the block to pick up
+- a 2D point representing where to drop the block
+* Full Q-Learning
+** System Design
+The map will be broken down into a discrete number of cells. Each
+square block will take up an odd number of cells, as will the
+representation of the arm. The pointer will point to exactly one
+cell. To pick up a block, the arm must contain the centermost cell of
+a block. If there are multiple blocks underneath the arm, select the
+one closest to the center.
+** Worker Design
+The Worker will be implemented using a Q-learning algorithm.
+*** State
+The state of the system will be made of:
+- the current locations and visual details of all the blocks
+- the current location of the Worker's arm
+- the syntax tree of the last command from the Commander
+- the location pointed to by the Commander
+- whether a block is being currently held by the arm and the visual
+  details of that block
+*** Actions
+The possible actions at any state (assuming that the action will not
+take the arm out of bounds) will be:
+- move north by one cell
+- move east by one cell
+- move south by one cell
+- move west by one cell
+- move north by ten cells
+- move east by ten cells
+- move south by ten cells
+- move west by ten cells
+- toggle arm (to grab / drop the block)
+- flip arm (to flip blocks)
+- stop
+
+There are 10 possible actions from each state, leading to a rather
+large explosion of possible states. The 10 cell movements were chosen
+to give the algorithm a better chance of finding the exit each
+** Training Phases
+In order to get a basically trained AI to perform the job of the
+Worker, an automated Commander will be created using data gathered
+from the previous "Human as Worker" stage.
+
+This has the great advantage of being extremely fast; without a human
+in the loop, thousands of trials may be executed in the same time that
+a human could issue a single instruction. Unfortunately, the only
+system that can effectively mimic instructions from any potential user
+is humans. If we only train with an AI Commander, the Worker may learn
+only the subset of interactions that the AI Commander knows about, and
+will be unable to handle more diverse and unexpected input.
+
+To counter this, once the Worker is trained to a "passable" point,
+fully automated learning will be switched off and the game will be
+made available for humans to play as the Commander. Since the Worker
+has been previously trained, the humans will produce much more
+relevant data from their interactions with the Worker, as opposed to
+if they were trying to talk to a non-responsive, untrained Worker.
+*** Completely Automated
+**** Outline
+| Stage                       |    Number of | Number of | Sequence of  |
+|                             | Instructions |    Blocks | Instructions |
+|-----------------------------+--------------+-----------+--------------|
+| (1) Proof of Concept        |            1 |         1 | Fixed        |
+| (2) World Size              |            1 |         5 | Fixed        |
+| (3) Instruction Count       |            5 |         5 | Fixed        |
+| (4) Randomize Order         |            5 |         5 | Randomized   |
+| (5) Randomize Phrases       |            5 |         5 | Randomized   |
+| (6) Randomize Accuracy      |            5 |         5 | Randomized   |
+| (7) Randomize Configuration |            5 |         5 | Randomized   |
+
+| Stage | Phrases         | "Human"    | World         |
+|       | Used            | Accuracy   | Configuration |
+|-------+-----------------+------------+---------------|
+| (1)   | Fixed           | Perfect    | Fixed         |
+| (2)   | Fixed           | Perfect    | Fixed         |
+| (3)   | Fixed           | Perfect    | Fixed         |
+| (4)   | Fixed           | Perfect    | Fixed         |
+| (5)   | Semi-Randomized | Perfect    | Fixed         |
+| (6)   | Semi-Randomized | Randomized | Fixed         |
+| (7)   | Semi-Randomized | Randomized | Randomized    |
+**** Implementation of the AI Commander
+During the previous "Human as Worker" phase, the system gathered lots
+of data about how humans act as the Commander. Using these
+interactions, we will assemble an AI Commander by patching together
+different phrases (at random, when necessary).
+*** TODO Human in the Loop
+* Reduced Q-Learning
+** System Design
+This proposal follows the same layout as [[Full Q-Learning]], but it
+attempts to handle the most significant hurdle to that method:
+scale. With all of the possible statements that could be given by the
+commander and how many different arrangements the board can have,
+Q-Learning would have too many states to remember and would rarely
+ever find itself in the same state.
+
+Our improvements to this is twofold: reduce the language into
+structure and reduce the precision of location of blocks.
+*** Structural Language
+In order to reduce the number of possible permuations that arise as
+the result of natural language, and given the fairly restrictive
+nature of the domain of many commands, the structure of the command
+and its direct object are likely the most relevant pieces of
+information about that command. Take these sentences with their
+direct objects underlined, for example.
+
+Move that /red block/ over here.
+Place that /red block/ around there.
+Set the /red block/ near there.
+
+To us, all of these sentences are saying the same thing (assuming the
+Commander is pointing to the same spot). If we only think about the
+structure and the direct object, we're able to group these sentences
+together into one shared state as well as distinguish between
+sentences like the following.
+
+Don't move the /red block/ over here.
+Move the /blue block/ over here.
+Move the /red block/ into that corner.
+
+There are some obvious drawbacks to such a simplistic solution. For
+starters, this won't be able to handle more complex sentences such as:
+
+Move the /red block/ next to that yellow block.
+Move /it/ a bit to the right.
+
+These are significant, and a more useful way of reducing a sentence
+may be useful.
+*** Location of Blocks
+In order to collapse the different possibilities of the locations of
+the blocks, we reduce the state of the world into a k-d tree. The
+state will only have a precise coordinate for the block it is closest
+to, and after that it will have less and less detailed knowledge of
+the precise locations of more distant blocks.
+
+The reasoning behind this is that moving a single block a tiny bit,
+especially when that block is irrelevant to the given command, would
+completely ignore any gained knowledge of an otherwise identical
+problem. If the locations of distant blocks are fuzzed, then small
+changes in their location will not affect the remembered state nearly
+as much.
+* Neural Network
+** System Design
+This proposal uses a neural network, and as such a few restrictions to
+the input are necessary. First of all, the number of blocks would need
+to be fixed at some number
+
+Inputs:
+
+Outputs:
+** Worker Design
+** Training Phases
