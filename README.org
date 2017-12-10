@@ -1,0 +1,11 @@
+* RHIT-XPrize GitHub.io Page
+Holds various documentation and presentations used for the RHIT-XPrize
+project. See other projects under this organization if you're
+interested.
+
+This is mostly just being used as cloud storage to hold the
+documentation and presentations we use. The index is a little rough
+looking, but it's basically just a file selector, so it doesn't really
+matter.
+
+Main page: [[https://rhit-xprize.github.io]]
