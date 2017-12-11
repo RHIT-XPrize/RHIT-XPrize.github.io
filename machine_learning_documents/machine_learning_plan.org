@@ -124,7 +124,14 @@ During the previous "Human as Worker" phase, the system gathered lots
 of data about how humans act as the Commander. Using these
 interactions, we will assemble an AI Commander by patching together
 different phrases (at random, when necessary).
-*** TODO Human in the Loop
+*** Human in the Loop
+Once the Worker AI reaches a certain acceptable baseline, the AI
+Commander will be swapped out with a wide array of human Commanders to
+provide a much more diverse set of interactions than with a single
+partner.
+
+This then essentially gets turned into single-player Blocksworld,
+allowing for a much more playable and accessible game.
 * Reduced Q-Learning
 ** System Design
 This proposal follows the same layout as [[Full Q-Learning]], but it
