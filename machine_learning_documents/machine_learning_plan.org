@@ -1,5 +1,6 @@
 #+TITLE: AI XPrize Machine Learning Plan
 #+AUTHOR: Remy Bubulka, Coleman Gibson, Kieran Groble, Lewis Kelley
+#+OPTIONS: toc:nil
 
 * Introduction
 In general, there are two proposed methods for training the robot AI,
@@ -159,12 +160,40 @@ changes in their location will not affect the remembered state nearly
 as much.
 * Neural Network
 ** System Design
-This proposal uses a neural network, and as such a few restrictions to
-the input are necessary. First of all, the number of blocks would need
-to be fixed at some number
-
-Inputs:
-
-Outputs:
+Another option for mapping inputs to instructions is to use a neural network.
+This method would allow for increased flexibility in the text input, as we would
+not need to constrain the format in any way. It would, however, require us to
+have a sizable data set before we are able to get meaningful results. This will
+be difficult to do without either a significant time commitment or a large
+number of people to help.
 ** Worker Design
+*** Inputs
+There are several possible ways we could provide inputs to our neural network,
+with our most significant choices being in how we provide the blocks and point
+locations from the Commander. One option is to fix the number of possible blocks
+or to give a maximum possible number. This would be most likely to give good
+results, but would provide constraints on the way the Worker views the outside
+world. The other option is to use an LSTM or similar recurrent layer to allow
+for variable length inputs. This would allow for an increase in flexibility, but
+may decrease the performance of our network. Neither the set of input blocks nor
+the points has any temporal locality, which is the usual use case of recurrent
+networks. A "window" of blocks is not really something that makes sense.
+*** Outputs
+We also have a number of options for our neural network output. One option is to
+set a discrete set of possible locations. The output to the neural network would
+then be the index of the block to move, followed by the location to place the
+block. Another option is to output two points. The first point would again refer
+to a block, but instead of being an index we would consider the block closest to
+the given point. The second point would then be the exact location to place it.
+We could also consider the output to be a set of instructions for the final
+robot. As an example, it could be the starting and final configurations for the
+arm. However, this method would be much more difficult to gather data for, and
+to test outside of the lab.
 ** Training Phases
+Using neural networks would provide a similar set of trade offs as the other
+methods. We will either need to spend a significant amount of time gathering
+data or use generated data, which may not be varied enough to allow us to
+eventually consider the entire English language. Similar to above, we would
+likely proceed by training on generated data until our Worker is passable, then
+allow access to human commanders who would be able to provide higher quality
+data.
