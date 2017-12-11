@@ -20,6 +20,27 @@ operate as a function that inputs:
 and outputs:
 - a 2D point representing the block to pick up
 - a 2D point representing where to drop the block
+* Notable Assumptions
+Essentially, this AI that is being produced should act as a function
+that looks like this:
+
+#+BEGIN_SRC
+make_move(List<Blocks> world,
+          String command,
+          Point pointed)
+    -> (Point start, Point end, bool should_flip)
+#+END_SRC
+
+Note that there is precisely /one/ point action. We assume that the
+user will only point to /at most one/ location for each command. This
+is due to the added complexity of handling an arbitrary number of
+pointed-to locations and correlating the times of their occurrence
+with the times of each individual word in the spoken command ("Move
+this <point> block there <point>").
+
+Additionally, this assumes that each command will ask for only one
+block to be moved. Phrases such as, "Move all the blocks over here,"
+will not be possible.
 * Full Q-Learning
 ** System Design
 The map will be broken down into a discrete number of cells. Each
@@ -197,3 +218,20 @@ eventually consider the entire English language. Similar to above, we would
 likely proceed by training on generated data until our Worker is passable, then
 allow access to human commanders who would be able to provide higher quality
 data.
+* Conclusion
+In brief, this is a very hard problem to solve, mostly due to the
+continuous and consequentially enormous input space. Natural language
+is in itself a huge task, but when combined with an additionally
+enormous space of the placement of a various number of blocks placed
+at non-discrete positions on a board, the problem gets substantially
+more difficult.
+
+Reinforcement learning works best when there is a manageable number of
+states to track and to score, but this is entirely infeasible without
+significantly reducing the search space, and even then those
+reductions may be corruptive or insufficient to handle to problem.
+
+We believe our best option is to utilize a neural network, train it to
+a "passable" level using the automated Commander, and finally turn it
+loose onto human players to gather a more diverse set of
+interactions.
