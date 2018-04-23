@@ -57,10 +57,23 @@ model.
 ** Python Server
 [[https://github.com/RHIT-XPrize/rhit-xprize-blocksworld/tree/Construction-Only/server][source]]
 
+Made up of one program, the server opens a connection to the database
+(set up in =create-baseline.sql=), uses an interface to the neural
+network (=neural_network_interface.py=), and communicates with the
+client using the =socket.io= library (=emits.py=).
 
+If the server cannot reach the database, it will instantly shut down.
 ** Web Page
 [[https://github.com/RHIT-XPrize/rhit-xprize-blocksworld/tree/Construction-Only/2D%20Simulation][source]]
 
+There are only a few pages of importance, with the most important
+being =game.html=. The included JavaScript files are roughly organized
+by their functionalities, with things like =movesTracker= tracking
+what moves were made to later be exported to the server, or =blocks=
+being used to hold and modify information about the onscreen blocks.
 
+Of special note is that like the server, this too uses the =socket.io=
+library for communication. Sequence diagrams detailing the
+interactions between the server and client can be found [[https://github.com/RHIT-XPrize/rhit-xprize-blocksworld/tree/Construction-Only/docs][here]].
 * Testing / Continuous Integration
 * Deployment
