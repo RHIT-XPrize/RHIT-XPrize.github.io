@@ -23,62 +23,8 @@ rather than flip one.
 * Software Architecture
 There are three major functionalities in the Blocksworld system: the
 neural network construction and training, the Python web server, and
-the web page that is shown to the end user.
-
-In brief:
-#+BEGIN_SRC plantuml :file blocksworld_arch.png
-  @startuml
-  actor developer
-  actor player
-
-  frame 2DSimulation {
-    component game
-  }
-
-  frame server {
-    database aixprize
-    component emits
-    component database_interface
-    component simulation
-    component neural_network_interface
-  }
-
-  simulation --> emits
-  simulation --> neural_network_interface
-  simulation --> database_interface
-  database_interface ..> aixprize
-
-  frame NeuralNetwork {
-    artifact model
-    artifact training_data
-    component generate_instructions
-    component model_trainer
-    component trainer_core
-    component model_runner
-  }
-
-  game ..> emits
-
-  neural_network_interface ..> model_runner
-
-  model_trainer --> trainer_core
-  model_trainer --> training_data
-  trainer_core --> model
-
-  model_runner --> model
-
-  player --> game
-
-  developer --> model_trainer
-
-  developer --> generate_instructions
-  generate_instructions -> training_data
-  @enduml
-#+END_SRC
-
-#+RESULTS:
-[[file:blocksworld_arch.png]]
-
+the web page that is shown to the end user. See the attached
+architecture diagram [[./blocksworld_arch.png][here]] for a general overview.
 ** Neural Network Construction and Training
 [[https://github.com/RHIT-XPrize/rhit-xprize-neural-network][source]]
 
