@@ -63,6 +63,10 @@ network (=neural_network_interface.py=), and communicates with the
 client using the =socket.io= library (=emits.py=).
 
 If the server cannot reach the database, it will instantly shut down.
+
+Also of note is that the neural network repository is cloned in as a
+submodule. See this repository's README for more details on properly
+installing it.
 ** Web Page
 [[https://github.com/RHIT-XPrize/rhit-xprize-blocksworld/tree/Construction-Only/2D%20Simulation][source]]
 
@@ -76,4 +80,31 @@ Of special note is that like the server, this too uses the =socket.io=
 library for communication. Sequence diagrams detailing the
 interactions between the server and client can be found [[https://github.com/RHIT-XPrize/rhit-xprize-blocksworld/tree/Construction-Only/docs][here]].
 * Testing / Continuous Integration
-* Deployment
+Due to the different repositories and languages used, different
+programs have different testing setups.
+
+The server simply uses =pytest=, with its tests located in the =tests=
+folder.
+
+The web page uses a combination of the Jasmine framework and Angular's
+Protractor for testing. Jasmine is used for the unit tests, which are
+stored in the =spec= folder.
+
+Protractor is used for end to end testing, and its syntax is identical
+to Jasmine's. It's configuration is set up in =conf.js=, and currently
+the only test file is =e2eTesting.js= (we don't plan on having many).
+
+We use Travis CI for our continuous integration environment of
+Blocksworld. Details are in the =.travis.yml= file. Note that the CI
+has to start up a Postgres database, start a Selenium service, test
+the server, test the web page, start the server, and finally run the
+end to end testing.
+
+There is additionally some buggy behavior with starting up the
+Selenium driver used by Firefox. More details are given in a comment
+in the CI file.
+* TODO Deployment
+Current plans for deployment are to write a script for the machine
+serving Blocksworld that automatically pulls the most recent version
+of the master branch and restart the server with the new code. This
+could either be run manually or as a cron job.
