@@ -1,0 +1,120 @@
+#+TITLE: Blocksworld Architecture
+#+AUTHOR: Remy Bubulka, Coleman Gibson, Kieran Groble, and Lewis Kelley
+
+* The Goal
+The 2D Blocksworld web game has been produced in order to more easily
+gather data to bootstrap the AI tied with the ongoing Human-Robot
+Collaboration project. The eventual goal is to have a 3D version, but
+in the meantime the AI should be proven in a simpler, 2D case from
+which it can learn and have its structure tweaked to best solve the
+problem.
+* AI Architecture
+Since a good portion of what is interpreted by the AI is natural
+language, a series of neural networks are used. The training takes
+place in the neural network suite of programs (see below for more
+details).
+
+In order to simplify what the AI has to interpret, multiple small AI's
+are run off of the input, each of which "annotates" the input with a
+different piece of information. For example, given an input of "Move
+the Green A there," one neural network flags the text as wanting a
+"green" block, and another will say the user wants to "move" a block
+rather than flip one.
+* Software Architecture
+There are three major functionalities in the Blocksworld system: the
+neural network construction and training, the Python web server, and
+the web page that is shown to the end user.
+
+In brief:
+#+BEGIN_SRC plantuml :file blocksworld_arch.png
+  @startuml
+  actor developer
+  actor player
+
+  frame 2DSimulation {
+    component game
+  }
+
+  frame server {
+    database aixprize
+    component emits
+    component database_interface
+    component simulation
+    component neural_network_interface
+  }
+
+  simulation --> emits
+  simulation --> neural_network_interface
+  simulation --> database_interface
+  database_interface ..> aixprize
+
+  frame NeuralNetwork {
+    artifact model
+    artifact training_data
+    component generate_instructions
+    component model_trainer
+    component trainer_core
+    component model_runner
+  }
+
+  game ..> emits
+
+  neural_network_interface ..> model_runner
+
+  model_trainer --> trainer_core
+  model_trainer --> training_data
+  trainer_core --> model
+
+  model_runner --> model
+
+  player --> game
+
+  developer --> model_trainer
+
+  developer --> generate_instructions
+  generate_instructions -> training_data
+  @enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:blocksworld_arch.png]]
+
+** Neural Network Construction and Training
+[[https://github.com/RHIT-XPrize/rhit-xprize-neural-network][source]]
+
+Everything in the neural network repository is related to training or
+running the various different neural networks that together form the
+Blocksworld AI. The training happens before the server is ever
+started, but this repository also includes python files used to run
+the neural network models it trains.
+
+It's important to note that the Neural Network repository is a suite
+of programs, not a library. Some are standalone programs, some
+generate data, and some train the models.
+
+Firstly is =generate_text_instructions.py=, which generates the
+training data for the trainer to use. It outputs the inputs into one
+file, then splits up the expected outputs into multiple files for each
+neural network to use.
+
+The most important file is =trainer_core.py=, which does the majority
+of the work when it comes to training. It's called by each of the
+individual trainers to train on their model with their specific
+expected outputs. This outputs =.h5= files that store the models, and
+can be re-run on stored models to improve an existing model.
+
+Finally is =model_runner.py=, which is used by the server as an
+interface to actually load and run the models to get some output from
+them. There is a user-friendly frontend to this, called
+=model_repl.py=, which is useful for quick testing of a newly trained
+model.
+** Python Server
+[[https://github.com/RHIT-XPrize/rhit-xprize-blocksworld/tree/Construction-Only/server][source]]
+
+
+** Web Page
+[[https://github.com/RHIT-XPrize/rhit-xprize-blocksworld/tree/Construction-Only/2D%20Simulation][source]]
+
+
+* Testing / Continuous Integration
+* Deployment
